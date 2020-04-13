@@ -6,6 +6,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
+require('express-async-errors')
 
 console.log('Connecting to Db')
 mongoose
