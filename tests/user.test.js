@@ -1,20 +1,10 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const User = require('../models/user')
 const helper = require('../utils/blog_helper')
 
 
 const api = supertest(app)
-
-// beforeEach(async () => {
-//     await Blog.deleteMany({})
-
-//     for(let blog of helper.initialBlogs) {
-//         let blogObject = new Blog(blog)
-//         await blogObject.save()
-//     }
-// })
 
 describe('api_post', () => {
     test('add existing user', async () => {
