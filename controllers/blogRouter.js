@@ -1,10 +1,11 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const logger = require('../utils/logger')
 
 blogRouter.get('/', async (request, response, next) => {
     try{
-        const blogs = await Blog.find({})
+        const blogs = await Blog.find({}).populate('user', { name: 1, username: 1 })
         const blogsJSON = blogs.map(blog => blog.toJSON())
         response.json(blogsJSON)
     } catch(error) {
@@ -14,14 +15,25 @@ blogRouter.get('/', async (request, response, next) => {
 })
 
 blogRouter.post('/', async (request, response) => {
-    const blog = new Blog(request.body)
+    const user = await User.findById(request.body.userId)
+    console.log(user)
+
+    const blog = new Blog({
+        title: request.body.title,
+        author: request.body.author,
+        url: request.body.url,
+        likes: request.body.likes,
+        user: user._id
+    })
     try{
         const result = await blog.save()
         logger.info(result)
+        user.blogs = user.blogs.concat(result._id)
+        await user.save()
         response.status(201).json(result.toJSON())
     } catch(error){
         logger.error(error)
-        response.status(400).json({ error:'Content might be missing' })
+        response.status(400).json({ error:error.message })
     }
 })
 

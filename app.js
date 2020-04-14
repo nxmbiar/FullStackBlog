@@ -2,6 +2,7 @@ const config = require('./utils/config')
 const express = require('express')
 const app = express()
 const blogRouter = require('./controllers/blogRouter')
+const userRouter = require('./controllers/userRouter')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
@@ -20,6 +21,7 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogRouter)
+app.use('/api/users', userRouter)
 
 logger.info('router loaded')
 
